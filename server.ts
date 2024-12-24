@@ -4,10 +4,10 @@ import connectDB from "./src/config/db";
 
 const startServer = async () => {
   await connectDB();
-  const port = config || 3000;
+  const port = config.port || 3000;
 
   app.listen(port, () => {
-    console.log(`Listening on PORT: ${config.port}`);
+    console.log(`Listening on PORT: ${port}`);
   });
 };
 
