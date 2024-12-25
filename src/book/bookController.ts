@@ -41,6 +41,9 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
       }
     );
 
+    // @ts-ignore
+    console.log("userId", req.userId);
+
     const newBook = await bookModel.create({
       title,
       genre,
@@ -53,7 +56,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
     await fs.promises.unlink(filePath);
     await fs.promises.unlink(bookFilePath);
 
-    res.status(201).json({id:newBook._id});
+    res.status(201).json({ id: newBook._id });
   } catch (error) {
     return next(createHttpError(500, "Error while uploading the file"));
   }
