@@ -54,6 +54,8 @@ web_modules/
 # Optional eslint cache
 .eslintcache
 
+public
+
 # Optional stylelint cache
 .stylelintcache
 
