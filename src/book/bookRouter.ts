@@ -41,7 +41,7 @@ bookRouter.patch(
 bookRouter.get("/", listBooks);
 //@ts-ignore
 bookRouter.get("/:bookId", getSingleBook);
-
+//@ts-ignore
 bookRouter.delete("/:bookId",authenticate,deleteBook);
 
 export default bookRouter;
