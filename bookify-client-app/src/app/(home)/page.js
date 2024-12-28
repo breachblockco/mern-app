@@ -1,21 +1,15 @@
 import Banner from "./components/Banner";
-import React from "react";
+import React, { Suspense } from "react";
 import BookList from "./components/BookList";
+import Loading from "@/components/Loading";
 
 async function page() {
-  // data fetching
-
-  const response = await fetch(`${process.env.BACKEND_URL}/books`);
-  if(!response){
-    throw new Error('An error occurred while fetching the books')
-  }
-  
-  const books =await response.json();
-  console.log(books)
   return (
     <>
       <Banner />
-      <BookList books={books}/>
+      <Suspense fallback={<Loading/>}>
+        <BookList />
+      </Suspense>
     </>
   );
 }
