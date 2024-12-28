@@ -3,7 +3,7 @@ import React from 'react'
 
 function Banner() {
   return (
-    <div className="mx-auto max-w-7xl px-5 py-10">
+    <div className="mx-auto max-w-7xl py-10">
       <div className="relative">
         <Image
           src={"/banner/paper-bg.jpg"}
