@@ -1,9 +1,12 @@
-import React from 'react'
+import Banner from "@/components/Banner";
+import React from "react";
 
 function page() {
   return (
-    <div>page</div>
-  )
+    <>
+      <Banner />
+    </>
+  );
 }
 
-export default page
+export default page;
