@@ -12,7 +12,10 @@
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.4",
+<<<<<<< HEAD
     "@radix-ui/react-dropdown-menu": "^2.1.4",
+=======
+>>>>>>> 802c1679956afaf1a3788791ff758bdd6bccb409
     "@radix-ui/react-label": "^2.1.1",
     "@radix-ui/react-popover": "^1.1.4",
     "@radix-ui/react-separator": "^1.1.1",
