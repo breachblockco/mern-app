@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { LoaderCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { login } from "@/http/api";
@@ -14,17 +15,17 @@ import React, { useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function LoginPage() {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const emailRef = useRef();
   const passwordRef = useRef();
 
-  const mutation=useMutation({
-    mutationFn:login,
-    onSuccess:()=>{
-      console.log('Login successfull')
-      navigate('/dashboard/home')
-    }
-  })
+  const mutation = useMutation({
+    mutationFn: login,
+    onSuccess: () => {
+      console.log("Login successfull");
+      navigate("/dashboard/home");
+    },
+  });
 
   const handleLoginSubmit = (event) => {
     event.preventDefault(); // Prevent form submission
@@ -32,7 +33,7 @@ function LoginPage() {
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
 
-    mutation.mutate({email,password})
+    mutation.mutate({ email, password });
   };
 
   return (
@@ -68,8 +69,11 @@ function LoginPage() {
                       ref={passwordRef}
                     />
                   </div>
-                  <Button type="submit" className="w-full">
-                    Login
+                  <Button type="submit" className="w-full" disabled={mutation.isPending}>
+                    {mutation.isPending && (
+                      <LoaderCircle className={`animate-spin`} />
+                    )}
+                    <span>Login</span>
                   </Button>
                 </div>
                 <div className="text-center text-sm">
