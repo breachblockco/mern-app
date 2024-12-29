@@ -3,11 +3,15 @@ import Link from "next/link";
 import React from "react";
 
 async function SingleBookPage({ params }) {
-  console.log(params);
   let book;
   try {
     const response = await fetch(
-      `${process.env.BACKEND_URL}/books/${params.bookId}`
+      `${process.env.BACKEND_URL}/books/${params.bookId}`,
+      {
+        next: {
+          revalidate: 3600,
+        },
+      }
     );
     if (!response.ok) {
       throw new Error("Error fetching book");
@@ -21,7 +25,7 @@ async function SingleBookPage({ params }) {
     throw new Error("Book not found");
   }
   return (
-    <div className="max-w-7xl mx-auto flex roboto-family mt-10 justify-between">
+    <div className="max-w-7xl mx-auto flex roboto-family my-10 justify-between">
       <div className="w-[55%]">
         <h2 className="text-5xl text-blue-900 font-semibold">{book.title}</h2>
         <h5 className="text-2xl font-medium mt-4">by {book.author.name}</h5>
