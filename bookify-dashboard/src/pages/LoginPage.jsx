@@ -43,6 +43,13 @@ function LoginPage() {
           <CardHeader className="text-center">
             <CardTitle className="text-3xl">Login</CardTitle>
           </CardHeader>
+          <div className="mb-5 w-full flex justify-center">
+            {mutation.isError && (
+              <span className=" text-red-500 text-sm text-center">
+                {mutation.error.message}
+              </span>
+            )}
+          </div>
           <CardContent>
             <form onSubmit={handleLoginSubmit}>
               <div className="grid gap-6">
@@ -69,7 +76,11 @@ function LoginPage() {
                       ref={passwordRef}
                     />
                   </div>
-                  <Button type="submit" className="w-full" disabled={mutation.isPending}>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={mutation.isPending}
+                  >
                     {mutation.isPending && (
                       <LoaderCircle className={`animate-spin`} />
                     )}
