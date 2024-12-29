@@ -24,21 +24,26 @@ async function SingleBookPage({ params }) {
   if (!book) {
     throw new Error("Book not found");
   }
+  console.log(book.description);
   return (
     <div className="max-w-7xl mx-auto flex roboto-family my-10 justify-between">
       <div className="w-[55%]">
         <h2 className="text-5xl text-blue-900 font-semibold">{book.title}</h2>
         <h5 className="text-2xl font-medium mt-4">by {book.author.name}</h5>
-        <p className="mt-4 mb-24">
-          Sure! Here's some random text: --- In the quiet embrace of the morning
-          sun, a gentle breeze carried the whispers of a new day. The world
-          seemed to hold its breath, waiting for the symphony of life to begin.
-          Birds danced across the sky, painting melodies with their wings, while
-          the leaves swayed in rhythm to an unseen orchestra. Each moment felt
-          alive, brimming with untold stories and endless possibilities. It was
-          a reminder that every sunrise brings the gift of a fresh start,
-          wrapped in the warmth of hope.
-        </p>
+        {book.description ? (
+          <p className="mt-4 mb-24">{book.description}</p>
+        ) : (
+          <p className="mt-4 mb-24">
+            Sure! Here's some random text: --- In the quiet embrace of the
+            morning sun, a gentle breeze carried the whispers of a new day. The
+            world seemed to hold its breath, waiting for the symphony of life to
+            begin. Birds danced across the sky, painting melodies with their
+            wings, while the leaves swayed in rhythm to an unseen orchestra.
+            Each moment felt alive, brimming with untold stories and endless
+            possibilities. It was a reminder that every sunrise brings the gift
+            of a fresh start, wrapped in the warmth of hope.
+          </p>
+        )}
         <Link
           href={book.file}
           target="_blank"

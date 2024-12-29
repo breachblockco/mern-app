@@ -7,7 +7,7 @@ import fs from "node:fs";
 import { AuthRequest } from "../middlewares/authenticate";
 
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
-  const { title, genre } = req.body;
+  const { title, genre, description } = req.body;
 
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
   const coverImageMimeType = files.coverImage[0].mimetype.split("/").at(-1);
@@ -46,6 +46,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
     const newBook = await bookModel.create({
       title,
       genre,
+      description,
       author: _req.userId,
       coverImage: uploadResult.secure_url,
       file: bookFileUploadResult.secure_url,
@@ -63,7 +64,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const updateBook = async (req: Request, res: Response, next: NextFunction) => {
-  const { title, genre } = req.body;
+  const { title, genre, description } = req.body;
   const bookId = req.params.bookId;
 
   try {
@@ -128,6 +129,7 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
       {
         title: title,
         genre: genre,
+        description: description,
         coverImage: completeCoverImage,
         file: completeFileName,
       },
@@ -142,7 +144,7 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
 
 const listBooks = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const book = await bookModel.find().populate("author","name");
+    const book = await bookModel.find().populate("author", "name");
     res.json(book);
   } catch (error) {
     return next(createHttpError(500, "Error while getting books"));
@@ -156,7 +158,9 @@ const getSingleBook = async (
 ) => {
   const bookId = req.params.bookId;
   try {
-    const book = await bookModel.findOne({ _id: bookId }).populate("author","name");
+    const book = await bookModel
+      .findOne({ _id: bookId })
+      .populate("author", "name");
     console.log(book);
     if (!book) {
       return next(createHttpError(404, "Book not found"));
@@ -197,7 +201,7 @@ const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
 
   await bookModel.deleteOne({ _id: bookId });
 
-  return res.sendStatus(204)
+  return res.sendStatus(204);
 };
 
 export { createBook, updateBook, listBooks, getSingleBook, deleteBook };
