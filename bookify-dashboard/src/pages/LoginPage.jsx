@@ -13,16 +13,20 @@ import { login } from "@/http/api";
 import { useMutation } from "@tanstack/react-query";
 import React, { useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import useTokenStore from "@/store";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const setToken=useTokenStore((state)=>state.setToken)
+
+
   const emailRef = useRef();
   const passwordRef = useRef();
 
   const mutation = useMutation({
     mutationFn: login,
-    onSuccess: () => {
-      console.log("Login successfull");
+    onSuccess: (response) => {
+      setToken(response.data.accessToken)
       navigate("/dashboard/home");
     },
   });
