@@ -35,11 +35,15 @@ import {
 import { Link, Navigate, NavLink, Outlet } from "react-router-dom";
 
 const DashboardLayout = () => {
-  const token = useTokenStore(state=>state.token)
+  const { token, setToken } = useTokenStore((state) => state);
 
-  if(!token){
-    return <Navigate to={'/auth/login'} replace/>
+  if (!token) {
+    return <Navigate to={"/auth/login"} replace />;
   }
+
+  const logout = () => {
+    setToken("");
+  };
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -188,7 +192,9 @@ const DashboardLayout = () => {
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <Button variant={"link"}>Logout</Button>
+                <Button variant={"link"} onClick={logout}>
+                  Logout
+                </Button>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
