@@ -64,7 +64,7 @@ const DashboardLayout = () => {
                 to="/dashboard/home"
                 className={({ isActive }) => {
                   return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
-                    isActive && "bg-muted"
+                    isActive && "bg-muted text-black"
                   }`;
                 }}
               >
@@ -76,7 +76,7 @@ const DashboardLayout = () => {
                 to="/dashboard/books"
                 className={({ isActive }) => {
                   return `flex mt-3 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
-                    isActive && "bg-muted"
+                    isActive && "bg-muted text-black"
                   }`;
                 }}
               >
