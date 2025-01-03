@@ -27,3 +27,8 @@ export const createBook=async (data)=>api.post('/api/books',data,{
      'Content-Type':'multipart/form-data'
   }
 })
+
+export const deleteBook = async (bookId) => {
+  return api.delete(`/api/books/${bookId}`);
+};
+

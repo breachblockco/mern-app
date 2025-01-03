@@ -31,10 +31,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getBooks } from "@/http/api";
-import { useQuery } from "@tanstack/react-query";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { deleteBook, getBooks } from "@/http/api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CirclePlus, MoreHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
+import React from "react";
+
+import { ToastContainer, toast } from "react-toastify";
 
 function BooksPage() {
   const { data, isLoading, isError } = useQuery({
@@ -42,9 +56,25 @@ function BooksPage() {
     queryFn: getBooks,
     staleTime: 10000,
   });
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: deleteBook,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["books"] });
+      toast.error("Book Deleted");
+    },
+  });
+
+  const handleDeleteBook = (bookId) => {
+    mutation.mutate(bookId);
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between">
+        <ToastContainer />
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -126,10 +156,38 @@ function BooksPage() {
                             <span className="sr-only">Toggle menu</span>
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                        <DropdownMenuContent align="end" className="flex flex-col items-start">
+                          <Button variant={'ghost'} className="w-full mb-2 text-left">Edit</Button>
+                          <Button
+                            variant={"ghost"}
+                            className="w-full"
+                          >
+                            <AlertDialog>
+                              <AlertDialogTrigger>Delete</AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>
+                                    Are you absolutely sure?
+                                  </AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    This action cannot be undone. This will
+                                    permanently delete your account and remove
+                                    your data from our servers.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction>
+                                    <button
+                                      onClick={() => handleDeleteBook(book._id)}
+                                    >
+                                      Continue
+                                    </button>
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </Button>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
