@@ -38,7 +38,7 @@ bookRouter.patch(
   updateBook
 );
 
-bookRouter.get("/", listBooks);
+bookRouter.get("/", authenticate,listBooks);
 //@ts-ignore
 bookRouter.get("/:bookId", getSingleBook);
 //@ts-ignore

@@ -73,8 +73,8 @@ function BooksPage() {
 
   return (
     <div>
+      <ToastContainer />
       <div className="flex items-center justify-between">
-        <ToastContainer />
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -156,12 +156,14 @@ function BooksPage() {
                             <span className="sr-only">Toggle menu</span>
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="flex flex-col items-start">
-                          <Button variant={'ghost'} className="w-full mb-2 text-left">Edit</Button>
+                        <DropdownMenuContent align="end">
                           <Button
                             variant={"ghost"}
-                            className="w-full"
+                            className="w-full mb-2 text-left"
                           >
+                            Edit
+                          </Button>
+                          <Button variant={"ghost"} className="w-full">
                             <AlertDialog>
                               <AlertDialogTrigger>Delete</AlertDialogTrigger>
                               <AlertDialogContent>

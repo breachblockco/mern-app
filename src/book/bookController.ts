@@ -60,7 +60,6 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
   } catch (error) {
     return next(createHttpError(500, "Error while uploading the file"));
   }
-  //   console.log(uploadResult);
 };
 
 const updateBook = async (req: Request, res: Response, next: NextFunction) => {
@@ -143,8 +142,11 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const listBooks = async (req: Request, res: Response, next: NextFunction) => {
+  const _req = req as AuthRequest;
   try {
-    const book = await bookModel.find().populate("author", "name");
+    const book = await bookModel
+      .find({ author: _req.userId })
+      .populate("author", "name");
     res.json(book);
   } catch (error) {
     return next(createHttpError(500, "Error while getting books"));
