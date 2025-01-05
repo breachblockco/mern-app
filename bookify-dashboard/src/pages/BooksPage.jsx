@@ -157,12 +157,14 @@ function BooksPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <Button
-                            variant={"ghost"}
-                            className="w-full mb-2 text-left"
-                          >
-                            Edit
-                          </Button>
+                          <Link to={`/dashboard/books/update/${book._id}`}>
+                            <Button
+                              variant={"ghost"}
+                              className="w-full mb-2 text-left"
+                            >
+                              Edit
+                            </Button>
+                          </Link>
                           <Button variant={"ghost"} className="w-full">
                             <AlertDialog>
                               <AlertDialogTrigger>Delete</AlertDialogTrigger>

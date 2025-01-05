@@ -65,6 +65,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
 const updateBook = async (req: Request, res: Response, next: NextFunction) => {
   const { title, genre, description } = req.body;
   const bookId = req.params.bookId;
+  console.log(bookId)
 
   try {
     const book = await bookModel.findOne({ _id: bookId });

@@ -27,13 +27,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { CirclePlus, LoaderCircle } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createBook } from "@/http/api";
+import { createBook, getSingleBook, updateBook } from "@/http/api";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -53,7 +53,9 @@ const formSchema = z.object({
   }, "Book PDF is required"),
 });
 
-function CreateBook() {
+function UpdateBook() {
+  const { bookId } = useParams();
+  const [bookDetails, setBookDetails] = useState(null);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -71,12 +73,35 @@ function CreateBook() {
   const navigate = useNavigate();
 
   const mutation = useMutation({
-    mutationFn: createBook,
+    mutationFn: getSingleBook,
+    onSuccess: (response) => {
+      setBookDetails(response.data);
+    },
+  });
+
+  const mutationUpdateBook = useMutation({
+    mutationFn: updateBook,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["books"] });
       navigate("/dashboard/books");
     },
   });
+
+  useEffect(() => {
+    // Fetch book details when bookId changes
+    mutation.mutate(bookId);
+  }, [bookId]); // Trigger only when bookId changes
+
+  useEffect(() => {
+    // Reset form when bookDetails is fetched
+    if (bookDetails) {
+      form.reset({
+        title: bookDetails.title,
+        genre: bookDetails.genre,
+        description: bookDetails.description,
+      });
+    }
+  }, [bookDetails, form]); // Trigger only when bookDetails changes
 
   function onSubmit(values) {
     const formdata = new FormData();
@@ -85,11 +110,14 @@ function CreateBook() {
     formdata.append("description", values.description);
     formdata.append("coverImage", values.coverImage[0]);
     formdata.append("file", values.file[0]);
-    mutation.mutate(formdata);
+
+    // Pass bookId and updatedData (FormData) to the mutation
+    mutationUpdateBook.mutate({ bookId, formdata });
   }
+
   return (
     <div>
-      <Form   >
+      <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex items-center justify-between">
             <Breadcrumb>
@@ -103,33 +131,29 @@ function CreateBook() {
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Create</BreadcrumbPage>
+                  <BreadcrumbPage>Update</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
             <div className="flex gap-3 items-center">
-              <Link to={'/dashboard/books'}>
+              <Link to={"/dashboard/books"}>
                 <Button variant="outline">
                   <span className="ml-2">Cancel</span>
                 </Button>
               </Link>
-              <Button
-                type="submit"
-                disabled={mutation.isPending}
-                className="w-full flex gap-2"
-              >
+              <Button type="submit" className="w-full flex gap-2" disabled={mutationUpdateBook.isPending}>
                 <span>
                   {mutation.isPending && (
                     <LoaderCircle className={`animate-spin`} />
                   )}
                 </span>
-                <span>Submit</span>
+                <span>Update</span>
               </Button>
             </div>
           </div>
           <Card className="mt-6">
             <CardHeader>
-              <CardTitle>Create a new book</CardTitle>
+              <CardTitle>Update book</CardTitle>
               <CardDescription>
                 Fill out the form below to create a new book.
               </CardDescription>
@@ -218,4 +242,4 @@ function CreateBook() {
   );
 }
 
-export default CreateBook;
+export default UpdateBook;
